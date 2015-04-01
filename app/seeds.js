@@ -1,13 +1,13 @@
 var db = require("../models");
 
-[ 
-    "defualt"
-  , "admin"
-  , "instructor"
-  , "student"
-].forEach(function (roleTitle) {
-  db.Role.create({title: roleTitle});
-})
+// [ 
+//     "defualt"
+//   , "admin"
+//   , "instructor"
+//   , "student"
+// ].forEach(function (roleTitle) {
+//   db.Role.create({title: roleTitle});
+// })
 
 db.Role.find({
   where: {
@@ -15,12 +15,14 @@ db.Role.find({
   }
 }).
 then(function (role){
-  db.User.createSecure({
-    user: {
-      email: 'bbb',
-      password: 'bbb',
-      password_confirmation: 'bbb',
-      roles: [role]
-    }
+  return db.User.createSecure({
+    email: 'bbb',
+    password: 'bbb',
+    password_confirmation: 'bbb',
+    roles: [role]
   })
+}).
+then(function (user){
+  console.log("USERING")
+  console.log(user);
 })

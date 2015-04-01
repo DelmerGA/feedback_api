@@ -43,7 +43,10 @@ module.exports = function(sequelize, DataTypes) {
                     transaction: t
                   }).
                 then(function () {
-                  return user;
+                  return {
+                    user: user,
+                    roles: params.roles
+                  };
                 });
           });
         });
@@ -53,6 +56,7 @@ module.exports = function(sequelize, DataTypes) {
         return Promise.promisify(bcrypt.genSalt)(10)
           .then(function (salt) {
             if (params.password === params.password_confirmation) {
+              console.log("Hashing")
               return Promise.promisify(bcrypt.hash)(params.password, salt);
             } else {
               throw new Error("PASSWORDS MUST MATCH");
