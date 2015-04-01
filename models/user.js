@@ -16,12 +16,12 @@ module.exports = function(sequelize, DataTypes) {
           through: models.UserScoreCard
         });
 
-        this.hasMany(db.UserRole);
-        this.belongsToMany(db.Role, {
-          through: db.UserRole
+        this.hasMany(models.UserRole);
+        this.belongsToMany(models.Role, {
+          through: models.UserRole
         });
 
-        this.hasMany(db.UserRole, {
+        this.hasMany(models.UserRole, {
           as: "Grantors"
         });
       },
@@ -70,7 +70,7 @@ module.exports = function(sequelize, DataTypes) {
 
             newParams.roles = params.roles;
             return that.createHelper(newParams);
-          }).
+          });
 
       },
       authenticate: function (params) {
