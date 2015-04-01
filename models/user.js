@@ -1,8 +1,12 @@
 "use strict";
+var bcrypt = require('bcrypt');
+var Promise = require('bluebird');
 module.exports = function(sequelize, DataTypes) {
   var User = sequelize.define("User", {
     firstName: DataTypes.STRING,
-    lastName: DataTypes.STRING
+    lastName: DataTypes.STRING,
+    passwordDigest: DataTypes.STRING,
+    email: DataTypes.STRING
   }, {
     classMethods: {
       associate: function(models) {
@@ -11,6 +15,83 @@ module.exports = function(sequelize, DataTypes) {
         this.hasMany(models.ScoreCard,{
           through: models.UserScoreCard
         });
+
+        this.hasMany(db.UserRole);
+        this.belongsToMany(db.Role, {
+          through: db.UserRole
+        });
+
+        this.hasMany(db.UserRole, {
+          as: "Grantors"
+        });
+      },
+      createHelper: function (params) {
+        var that = this;
+        return sequelize.
+          transaction(function (t) {
+            return that.
+            create(
+              params.user, 
+              {
+                transaction: t
+              }).
+            then(function (user) {
+              return user.
+                addPrivileges(
+                  params.privileges, 
+                  {
+                    transaction: t
+                  }).
+                then(function () {
+                  return user;
+                });
+          });
+        });
+      },
+      createSecure: function (params) {
+        var that = this;
+        return Promise.promisify(bcrypt.genSalt)(10)
+          .then(function (salt) {
+            if (params.password = params.password_confirmation) {
+              return Promise.promisify(bcrypt.hash)(params.password, salt);
+            } else {
+              throw new Error("PASSWORDS MUST MATCH");
+            }
+          }).
+          then(function (hash) {
+            var newParams = {};
+
+            newParams.user = { 
+              firstName: params.firstName,
+              lastName: params.lastName,
+              email: params.email,
+              passwordDigest: hash
+            };
+
+            newParams.privileges = params.privileges;
+            return that.createHelper(newParams);
+          }).
+
+      },
+      authenticate: function (params) {
+        return this.find({
+          where: {
+            email: params.email
+          }
+        }).then(function (user) {
+          return user.confirm(params)
+        })
+      }
+    },
+    instanceMethods: {
+      confirm: function (params) {
+        var that = this;
+        var compare = Promise.promisify(bcrypt.compare);
+        return compare(params.password, that.passwordDigest)
+            .then(function (res){
+              if (res === false) { throw new Error("Comparison Error");}
+              return that;
+            });
       }
     }
   });

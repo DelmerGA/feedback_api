@@ -12,7 +12,7 @@ function setup(middleware) {
     if (req.body.user.kind !== "admin") {
       console.log(req.body.user)
       req.db.
-        User.create(req.body.user)
+        User.createSecure(req.body.user)
         .then(function (user) {
           var token = req.jwt.sign(user.dataValues, process.env.JWT_SECRET);
           res.send(token);

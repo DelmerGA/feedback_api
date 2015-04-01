@@ -1,4 +1,4 @@
-module.exports.setup = function setup(mainRouter) {
+function MainMiddleware(mainRouter) {
 
   function attach(opts) {
     console.log("RUNNING")
@@ -12,3 +12,5 @@ module.exports.setup = function setup(mainRouter) {
     attach: attach
   }
 }
+
+module.exports.setup = MainMiddleware;

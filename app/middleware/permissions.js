@@ -2,7 +2,7 @@ var path = require('path');
 var expJWT = require('express-jwt');
 var bodyParser = require('body-parser');
 
-function setup(mainRouter) {
+function PermissionMiddleware(mainRouter) {
 
   var isAuthorized = function isAuthorized(req, res, next) {
     req.authorized = function (scopes) {
@@ -47,4 +47,4 @@ function setup(mainRouter) {
   };
 }
 
-module.exports.setup = setup
+module.exports.setup = PermissionMiddleware;

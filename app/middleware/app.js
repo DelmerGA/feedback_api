@@ -6,12 +6,24 @@ var morgan = require('morgan');
 var jwt = require('jsonwebtoken');
 
 
-function setup(mainRouter) {
+function AppMiddleware(mainRouter) {
 
   function attach(opts) {
 
     mainRouter.use(bodyParser.urlencoded({ extended: true}));
     mainRouter.use(bodyParser.json());
+
+
+    function signIn(user) {
+      return user.getPrivilleges().
+      then(function (privileges) {
+        return req.jwt.sign({
+            id: user.id,
+            scopes: privileges
+          }, 
+          process.env.JWT_SECRET);
+      });
+    }
 
     function serviceSetup(req, res, next) {
       req.jwt = jwt;
@@ -34,4 +46,4 @@ function setup(mainRouter) {
   };
 }
 
-module.exports.setup = setup
+module.exports.setup = AppMiddleware
