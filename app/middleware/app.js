@@ -15,14 +15,17 @@ function AppMiddleware(mainRouter) {
 
 
     function signIn(user) {
-      return req.jwt.sign({
+      return this.jwt.sign({
             id: user.id,
             scopes: user.roles
           }, 
           process.env.JWT_SECRET);
+      next();
     }
 
+
     function serviceSetup(req, res, next) {
+      req.signIn = signIn;
       req.jwt = jwt;
       req.db = db;
       next();

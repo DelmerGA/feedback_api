@@ -28,3 +28,6 @@
 ::1 - - [27/Mar/2015:06:08:36 +0000] "POST /api/v1/register HTTP/1.1" - - "-" "curl/7.30.0"
 ::1 - - [27/Mar/2015:06:11:22 +0000] "POST /api/v1/register HTTP/1.1" 200 264 "-" "curl/7.30.0"
 ::1 - - [27/Mar/2015:06:12:12 +0000] "POST /api/v1/register HTTP/1.1" 200 264 "-" "curl/7.30.0"
+::1 - - [01/Apr/2015:01:16:58 +0000] "POST /api/v1/register HTTP/1.1" 200 421 "-" "curl/7.30.0"
+::1 - - [01/Apr/2015:01:23:04 +0000] "POST /api/v1/register HTTP/1.1" 200 127 "-" "curl/7.30.0"
+::1 - - [01/Apr/2015:01:23:08 +0000] "POST /api/v1/register HTTP/1.1" 200 127 "-" "curl/7.30.0"

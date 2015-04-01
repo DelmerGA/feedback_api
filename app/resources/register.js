@@ -19,13 +19,14 @@ function setup(middleware) {
         }).
           then(function (role) {
             req.body.user.roles = [role];
-            return User.createSecure(req.body.user);
+            return req.db.User.createSecure(req.body.user);
           }).
           then(function (user) {
-            var token = req.jwt.sign(user.dataValues, process.env.JWT_SECRET);
+            var token = req.signIn(user);
             res.send(token);
-          })
+          });
     }
+
   });
 
   return config;
