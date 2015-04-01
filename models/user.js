@@ -37,8 +37,8 @@ module.exports = function(sequelize, DataTypes) {
               }).
             then(function (user) {
               return user.
-                addPrivileges(
-                  params.privileges, 
+                addRoles(
+                  params.roles, 
                   {
                     transaction: t
                   }).
@@ -68,7 +68,7 @@ module.exports = function(sequelize, DataTypes) {
               passwordDigest: hash
             };
 
-            newParams.privileges = params.privileges;
+            newParams.roles = params.roles;
             return that.createHelper(newParams);
           }).
 

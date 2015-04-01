@@ -12,11 +12,19 @@ function setup(middleware) {
     if (req.body.user.kind !== "admin") {
       console.log(req.body.user)
       req.db.
-        User.createSecure(req.body.user)
-        .then(function (user) {
-          var token = req.jwt.sign(user.dataValues, process.env.JWT_SECRET);
-          res.send(token);
-        })
+        Role.find({
+          where: {
+            title: "default"
+          }
+        }).
+          then(function (role) {
+            req.body.user.roles = [role];
+            return User.createSecure(req.body.user);
+          }).
+          then(function (user) {
+            var token = req.jwt.sign(user.dataValues, process.env.JWT_SECRET);
+            res.send(token);
+          })
     }
   });
 

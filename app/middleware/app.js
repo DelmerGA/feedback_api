@@ -15,14 +15,11 @@ function AppMiddleware(mainRouter) {
 
 
     function signIn(user) {
-      return user.getPrivilleges().
-      then(function (privileges) {
-        return req.jwt.sign({
+      return req.jwt.sign({
             id: user.id,
-            scopes: privileges
+            scopes: user.roles
           }, 
           process.env.JWT_SECRET);
-      });
     }
 
     function serviceSetup(req, res, next) {
