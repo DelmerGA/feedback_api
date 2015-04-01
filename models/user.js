@@ -52,7 +52,7 @@ module.exports = function(sequelize, DataTypes) {
         var that = this;
         return Promise.promisify(bcrypt.genSalt)(10)
           .then(function (salt) {
-            if (params.password = params.password_confirmation) {
+            if (params.password === params.password_confirmation) {
               return Promise.promisify(bcrypt.hash)(params.password, salt);
             } else {
               throw new Error("PASSWORDS MUST MATCH");
